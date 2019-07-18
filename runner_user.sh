@@ -65,23 +65,24 @@ init_repo() {
 
 dt() {
     echo "Cloning device tree......."
-    git clone https://github.com/PixelExperience-Devices/device_xiaomi_violet -b pie device/xiaomi/violet > /dev/null 2>&1
+    git clone https://github.com/Dyneteve/davinci_listfiles -b pie device/xiaomi/violet > /dev/null 2>&1
     git clone https://github.com/PixelExperience-Devices/vendor_xiaomi_violet -b pie vendor/xiaomi/violet > /dev/null 2>&1
     cd device/xiaomi/violet
 }
 
 gen_blob() {
-    bash extract-files.sh ~/extract/miui
+    bash extract-files.sh --no-cleanup ~/extract/miui
     echo "Blobs Generated!"
 }
 
 push_vendor() {
     cd ~/repo/vendor/xiaomi/violet
     git remote rm origin
-    git remote add origin https://Dyneteve:$(cat /tmp/GH_TOKEN)@github.com/PixelExperience-Devices/vendor_xiaomi_violet.git
+    git remote add origin https://Dyneteve:$(cat /tmp/GH_TOKEN)@github.com/Dyneteve/vendor_xiaomi_violet.git
     git add .
-    git commit -m "violet: Re-gen blobs from MIUI $(cat /tmp/version)" --signoff
-    git push origin pie
+    git commit -m "violet: Update vendor blobs from davinci" --signoff
+    git checkout -b $(cat /tmp/version)
+    git push --force origin $(cat /tmp/version)
     echo "Job Successful!"
 }
 
