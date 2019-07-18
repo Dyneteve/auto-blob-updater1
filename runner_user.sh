@@ -12,7 +12,7 @@
 build_env() {
     export LOC=$(cat /tmp/loc)
     cd ~
-    sudo apt install patchelf brotli unzip zip repo p7zip-full p7zip-rar -y > /dev/null 2>&1
+    sudo apt install patchelf brotli unzip zip repo p7zip-full -y > /dev/null 2>&1
     pip3 install requests > /dev/null 2>&1
     echo "Build Dependencies Installed....."
 }
