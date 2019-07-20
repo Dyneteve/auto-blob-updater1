@@ -2,7 +2,7 @@ kind: pipeline
 name: MaestroCI Build Bot
 
 steps:
-- name: test
+- name: Blobs
   image: ubuntu:rolling
   environment:
     API_KEY:

@@ -12,7 +12,7 @@
 build_env() {
     export LOC=$(cat /tmp/loc)
     cd ~
-    sudo apt install patchelf brotli unzip zip repo p7zip-full -y > /dev/null 2>&1
+    sudo apt install python patchelf brotli unzip zip repo p7zip-full -y > /dev/null 2>&1
     pip3 install requests > /dev/null 2>&1
     echo "Build Dependencies Installed....."
 }
@@ -57,9 +57,9 @@ build_conf() {
 
 init_repo() {
     echo "Repo initialised......."
-    repo init -u https://github.com/PixelExperience/manifest -b pie --depth=1 > /dev/null 2>&1
+    repo init -u git://github.com/PixelExperience/manifest.git -b pie --depth=1 > /dev/null 2>&1
     echo "Repo Syncing started......"
-    repo sync -j$(nproc) --no-tags --no-clone-bundle -c > /dev/null 2>&1
+    repo sync --force-sync --current-branch --no-tags --no-clone-bundle --optimized-fetch --prune -j$(nproc) -q > /dev/null 2>&1
     echo -e "\e[32mRepo Synced....."
 }
 
