@@ -10,26 +10,20 @@
 # shellcheck disable=1090
 
 build_env() {
-    export LOC=$(cat /tmp/loc)
-    cd ~
-    sudo apt install python patchelf brotli unzip zip repo p7zip-full -y > /dev/null 2>&1
-    pip3 install requests > /dev/null 2>&1
     echo "Build Dependencies Installed....."
+    export CURR_DIR=$(pwd)
 }
 
 rom() {
-    mkdir extract
-    cd extract
-    sudo mv $LOC/get_rom.py get_rom.py
     python3 get_rom.py
     unzip rom.zip -d miui > /dev/null 2>&1
     cd miui
 }
 
 dec_brotli() {
+    echo "Decompressing brotli....."
     brotli --decompress system.new.dat.br
     brotli --decompress vendor.new.dat.br
-    echo "Brotli decompressed....."
 }
 
 sdatimg() {
@@ -45,7 +39,7 @@ extract() {
     mkdir vendor
     7z x system.img -y -osystem > /dev/null 2>&1
     7z x vendor.img -y -ovendor > /dev/null 2>&1
-    cd ~
+    cd $CURR_DIR
 }
 
 build_conf() {
@@ -71,12 +65,12 @@ dt() {
 }
 
 gen_blob() {
-    bash extract-files.sh --no-cleanup ~/extract/miui
+    bash extract-files.sh --no-cleanup $CURR_DIR/miui
     echo "Blobs Generated!"
 }
 
 push_vendor() {
-    cd ~/repo/vendor/xiaomi/violet
+    cd $CURR_DIR/repo/vendor/xiaomi/violet
     git remote rm origin
     git remote add origin https://Dyneteve:$(cat /tmp/GH_TOKEN)@github.com/Dyneteve/vendor_xiaomi_violet.git
     git add .
