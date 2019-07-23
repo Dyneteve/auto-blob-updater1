@@ -11,7 +11,8 @@
 
 build_env() {
     echo "Build Dependencies Installed....."
-    export CURR_DIR=$(pwd)
+    GH_PERSONAL_TOKEN=$(cat /tmp/gh_token)
+    CURR_DIR=$(pwd)
 }
 
 rom() {
@@ -43,10 +44,14 @@ extract() {
 }
 
 build_conf() {
-    mkdir repo
-    cd repo
+    mkdir repo && cd repo
     git config --global user.email "sound0020@gmail.com"
     git config --global user.name "Dyneteve"
+}
+
+google_cookie() {
+    git clone https://Dyneteve:${GH_PERSONAL_TOKEN}@github.com/Dyneteve/google.git cookie > /dev/null 2>&1
+    cd cookie && bash cookie.sh && cd ..
 }
 
 init_repo() {
@@ -72,7 +77,7 @@ gen_blob() {
 push_vendor() {
     cd $CURR_DIR/repo/vendor/xiaomi/violet
     git remote rm origin
-    git remote add origin https://Dyneteve:$(cat /tmp/GH_TOKEN)@github.com/Dyneteve/vendor_xiaomi_violet.git
+    git remote add origin https://Dyneteve:${GH_PERSONAL_TOKEN}@github.com/Dyneteve/vendor_xiaomi_violet.git
     git add .
     git commit -m "violet: Update vendor blobs from davinci" --signoff
     git checkout -b $(cat /tmp/version)
@@ -86,6 +91,7 @@ dec_brotli
 sdatimg
 extract
 build_conf
+google_cookie
 init_repo
 dt
 gen_blob
